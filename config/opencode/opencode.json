@@ -1,0 +1,55 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "update": "disable",
+  "share": "disabled",
+  "model": "cortecs/glm-5.3",
+  "instructions": [
+    "/etc/opencode/AGENTS.md"
+  ],
+  "providers": {
+    "cortecs": {
+      "settings": {
+        "baseURL": "http://llm-gateway:8080/v1",
+        "apiKey": "placeholder-the-gateway-injects-the-real-key"
+      }
+    }
+  },
+  "policies": [
+    { "action": "provider.use", "resource": "*", "effect": "deny" },
+    { "action": "provider.use", "resource": "cortecs", "effect": "allow" }
+  ],
+  "agents": {
+    "title": {
+      "model": "cortecs/glm-5.3-flash"
+    }
+  },
+  "permissions": [
+    { "action": "*", "resource": "*", "effect": "ask" },
+    { "action": "read", "resource": "*", "effect": "allow" },
+    { "action": "read", "resource": "*.env", "effect": "deny" },
+    { "action": "read", "resource": "*.env.*", "effect": "deny" },
+    { "action": "read", "resource": "*.pem", "effect": "deny" },
+    { "action": "read", "resource": "*.key", "effect": "deny" },
+    { "action": "edit", "resource": "*", "effect": "allow" },
+    { "action": "glob", "resource": "*", "effect": "allow" },
+    { "action": "grep", "resource": "*", "effect": "allow" },
+    { "action": "skill", "resource": "*", "effect": "allow" },
+    { "action": "subagent", "resource": "*", "effect": "allow" },
+    { "action": "webfetch", "resource": "*", "effect": "deny" },
+    { "action": "websearch", "resource": "*", "effect": "deny" },
+    { "action": "external_directory", "resource": "*", "effect": "deny" },
+    { "action": "shell", "resource": "*", "effect": "allow" },
+    { "action": "shell", "resource": "git push*", "effect": "deny" },
+    { "action": "shell", "resource": "git remote*", "effect": "deny" },
+    { "action": "shell", "resource": "git config*", "effect": "deny" },
+    { "action": "shell", "resource": "curl*", "effect": "deny" },
+    { "action": "shell", "resource": "wget*", "effect": "deny" },
+    { "action": "shell", "resource": "ssh*", "effect": "deny" },
+    { "action": "shell", "resource": "scp*", "effect": "deny" },
+    { "action": "shell", "resource": "nc*", "effect": "deny" },
+    { "action": "shell", "resource": "ncat*", "effect": "deny" },
+    { "action": "shell", "resource": "sudo*", "effect": "deny" },
+    { "action": "shell", "resource": "rm -rf /*", "effect": "deny" },
+    { "action": "shell", "resource": "rm -rf ~*", "effect": "deny" }
+  ]
+}

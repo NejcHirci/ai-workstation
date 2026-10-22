@@ -1,0 +1,17 @@
+# Path under skills/ in mattpocock/skills, one per line.
+
+# --- Core (phase 1) ---
+productivity/grilling
+productivity/grill-me
+productivity/handoff
+productivity/writing-for-agents
+productivity/wait-what
+engineering/domain-modeling
+engineering/grill-with-docs
+engineering/tdd
+engineering/diagnosing-bugs
+engineering/code-review
+engineering/codebase-design
+engineering/improve-codebase-architecture
+engineering/retro
+engineering/setup-matt-pocock-skills

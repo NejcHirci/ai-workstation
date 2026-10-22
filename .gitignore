@@ -1,0 +1,6 @@
+# Host-only state of allow-site (temporary allowlist entries): .json from the PowerShell script, no extension from the bash script
+images/squid/allowlist.expiry.json
+images/squid/allowlist.expiry
+
+*.log
+.vscode

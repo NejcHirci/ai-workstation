@@ -1,0 +1,41 @@
+# envsubst substitutes ONLY ${CORTECS_*} (see NGINX_ENVSUBST_FILTER in lib.ps1).
+log_format gw '$time_iso8601 $request_method $uri $status req=$request_length resp=$bytes_sent t=$request_time';
+
+server {
+    listen 8080;
+    server_name _;
+    access_log /dev/stdout gw;
+    error_log  /dev/stderr warn;
+
+    # DNS of the egress network (aardvark-dns, gateway IP of agent-egress). Re-resolves api.cortecs.ai.
+    resolver 10.89.78.1 valid=30s ipv6=off;
+    client_max_body_size 64m;
+
+    location = /healthz { return 200 "ok\n"; }
+
+    # Only the Cortecs API paths an agent needs. Only GET and POST.
+    location ~ ^/v1/(responses|chat/completions|models|messages)(/.*)?$ {
+        limit_except GET POST { deny all; }
+
+        set $upstream https://api.cortecs.ai;
+        proxy_pass $upstream;
+
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        proxy_set_header Host api.cortecs.ai;
+        proxy_set_header Authorization "Bearer ${CORTECS_API_KEY}";
+
+        proxy_ssl_server_name on;
+        proxy_ssl_name api.cortecs.ai;
+        proxy_ssl_verify on;
+        proxy_ssl_verify_depth 5;       # default is 1, too shallow for chains with 2+ intermediates
+        proxy_ssl_trusted_certificate /etc/ssl/certs/ca-certificates.crt;
+
+        proxy_buffering off;            # streaming (SSE) responses
+        proxy_request_buffering off;
+        proxy_read_timeout 900s;
+        proxy_send_timeout 900s;
+    }
+
+    location / { return 403; }
+}
